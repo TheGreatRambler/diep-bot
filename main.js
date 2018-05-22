@@ -14,7 +14,7 @@ var start = function() {
 				break;
 			case "Darwin":
 				robot.keyTap("f", ["command", ""control"]);
-				break:
+				break;
 			case "Windows_NT":
 				robot.keyTap("up", "command");
 				break;
