@@ -1,5 +1,7 @@
 var robot = require("robotjs");
-var opn = require("opn");
+var nightmare = require("nightmare")({
+	show: true
+});
 
 var g_v = {
 	centerx: Math.round(robot.getScreenSize().width / 2),
@@ -19,8 +21,7 @@ var g_f = {
 };
 
 var start = function() {
-	opn("http://diep.io/").then(function() {
-		// maximise window, because if we dont, problems arise
+	nightmare.goto("http://diep.io/").then(function() {
 		var ostype = os.type();
 		if (ostype === "Linux") {
 			robot.keyTap("alt", "f10");
@@ -32,11 +33,7 @@ var start = function() {
 			// assume its some really obscure linux distribution
 			robot.keyTap("alt", "f10");
 		}
-		
-		robot.moveMouse(g_v.centerx, Math.round(g_v.centery * 1.1));
-		robot.mouseClick();
-		robot.keyTap("a", "control");
-		robot.typeString(process.argv[2] || "A BOTTY BOT");
+	}).wait("#textInput").type("#textInput", process.argv[2] || "A BOTTY BOT").then(function() {
 		robot.keyTap("enter");
 		startPlaying();
 	});
