@@ -1,20 +1,8 @@
 var robot = require("robotjs");
-var Nightmare = require("nightmare")
-
-Nightmare.action("maximize", function(name, options, parent, win, renderer, done) {
-    parent.respondTo("maximize", function(done) {
-      win.maximize();
-    });
-    done();
-}, function(done) {
-    this.child.call("maximize", done)
-});
-
-var nightmare = Nightmare({
-	show: true
-});
+var puppeteer = require("puppeteer");
 
 var g_v = {
+	size: robot.getScreenSize(),
 	centerx: Math.round(robot.getScreenSize().width / 2),
 	centery: Math.round(robot.getScreenSize().height / 2),
 	spinradius: robot.getScreenSize().height / 6
@@ -31,14 +19,35 @@ var g_f = {
 	}
 };
 
-var start = function() {
-	nightmare.goto("http://diep.io/").maximize().wait("#textInput").type("#textInput", process.argv[2] || "A BOTTY BOT").wait(function() {
-		return document.getElementById("textInputContainer").style.display === "none";
-	}).then(function() {
-		robot.keyTap("enter");
-		startPlaying();
+function start() {
+	puppeteer.launch({
+		headless: false
+	}).then(function(browser) {
+		browser.newPage().then(function(page) {
+			page.setViewport({
+				width: g_v.size.width,
+				height: g_v.size.height
+			}).then(function() {
+				page.goto("http://diep.io/").then(function() {
+					page.waitForNavigation({
+						waitUntil: "networkidle0"
+					}).then(function() {
+						page.waitForSelector("#textInput").then(function() {
+							page.type("#textInput", process.argv[2] || "A BOTTY BOT").then(function() {
+								robot.keyTap("enter");
+								page.waitForFunction(function() {
+									return document.getElementById("textInputContainer").style.display === "none";
+								}).then(function() {
+									startPlaying();
+								});
+							});
+						});
+					});
+				});
+			});
+		});
 	});
-};
+}
 
 function startPlaying() {
 	console.log("We are in");
