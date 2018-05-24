@@ -1,5 +1,16 @@
 var robot = require("robotjs");
-var nightmare = require("nightmare")({
+var Nightmare = require("nightmare")
+
+Nightmare.action("maximize", function(name, options, parent, win, renderer, done) {
+    parent.respondTo("maximize", function(done) {
+      win.maximize();
+    });
+    done();
+}, function(done) {
+    this.child.call("maximize", done)
+});
+
+var nightmare = Nightmare({
 	show: true
 });
 
@@ -21,19 +32,9 @@ var g_f = {
 };
 
 var start = function() {
-	nightmare.goto("http://diep.io/").then(function() {
-		var ostype = os.type();
-		if (ostype === "Linux") {
-			robot.keyTap("alt", "f10");
-		} else if (ostype === "Darwin") {
-			robot.keyTap("f", ["command", "control"]);
-		} else if (ostype === "Windows_NT") {
-			robot.keyTap("up", "command");
-		} else {
-			// assume its some really obscure linux distribution
-			robot.keyTap("alt", "f10");
-		}
-	}).wait("#textInput").type("#textInput", process.argv[2] || "A BOTTY BOT").then(function() {
+	nightmare.goto("http://diep.io/").maximize().wait("#textInput").type("#textInput", process.argv[2] || "A BOTTY BOT").wait(function() {
+		return document.getElementById("textInputContainer").style.display === "none";
+	}).then(function() {
 		robot.keyTap("enter");
 		startPlaying();
 	});
