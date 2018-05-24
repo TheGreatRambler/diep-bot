@@ -20,8 +20,10 @@ var g_f = {
 };
 
 function start() {
+	// callback hell much?
 	puppeteer.launch({
-		headless: false
+		headless: false,
+		//args: ["--start-fullscreen"]
 	}).then(function(browser) {
 		browser.newPage().then(function(page) {
 			page.setViewport({
@@ -34,11 +36,12 @@ function start() {
 					}).then(function() {
 						page.waitForSelector("#textInput").then(function() {
 							page.type("#textInput", process.argv[2] || "A BOTTY BOT").then(function() {
-								robot.keyTap("enter");
-								page.waitForFunction(function() {
-									return document.getElementById("textInputContainer").style.display === "none";
-								}).then(function() {
-									startPlaying();
+								page.keyboard.press("Enter").then(function() {
+									page.waitForFunction(function() {
+										return document.getElementById("textInputContainer").style.display === "none";
+									}).then(function() {
+										startPlaying();
+									});
 								});
 							});
 						});
