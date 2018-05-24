@@ -4,7 +4,7 @@
   "description": "A diep.io bot for node.js",
   "dependencies": {
     "robotjs": "^0.5.1",
-    "nightmare": "^3.0.1"
+    "puppeteer": "^1.4.0"
   },
   "repository": {
     "type": "git",
