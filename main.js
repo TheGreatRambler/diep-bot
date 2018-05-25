@@ -1,5 +1,6 @@
 var robot = require("robotjs");
 var puppeteer = require("puppeteer");
+var tracking = require("jstracking");
 
 var g_v = {
 	size: robot.getScreenSize(),
