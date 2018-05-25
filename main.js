@@ -41,8 +41,28 @@ function start() {
 					page.waitForNavigation({
 						waitUntil: "networkidle0"
 					}).then(function() {
+						switch (process.argv[2]) {
+							case "FFA":
+								break;
+							case "Survival":
+								break;
+							case "2 Teams":
+								break;
+							case "4 Teams":
+								break;
+							case "Domination":
+								break;
+							case "Tag":
+								break;
+							case "Maze":
+								break;
+							case "Sandbox":
+								break;
+							default:
+								// 4 Teams
+						}
 						page.waitForSelector("#textInput").then(function() {
-							page.type("#textInput", process.argv[2] || "A BOTTY BOT").then(function() {
+							page.type("#textInput", process.argv[3] || "A BOTTY BOT").then(function() {
 								page.keyboard.press("Enter").then(function() {
 									waitUntilDiepReady().then(function() {
 										startPlaying();
