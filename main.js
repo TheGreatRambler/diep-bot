@@ -87,7 +87,7 @@ function startPlaying() {
 	datatracker.on('track', function(event) {
   		if (event.data.length !== 0) {
     		event.data.forEach(function(data) {
-      			// Plots the detected targets here.
+      			// Plots the detected targets here. 
     		});
   		}
 	});
