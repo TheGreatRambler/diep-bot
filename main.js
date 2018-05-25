@@ -1,6 +1,10 @@
 var robot = require("robotjs");
 var puppeteer = require("puppeteer");
 var tracking = require("jstracking");
+var PNG = require("png-js");
+
+var b;
+var p;
 
 var g_v = {
 	size: robot.getScreenSize(),
@@ -26,7 +30,9 @@ function start() {
 		headless: false,
 		//args: ["--start-fullscreen"]
 	}).then(function(browser) {
+		b = browser;
 		browser.newPage().then(function(page) {
+			p = page;
 			page.setViewport({
 				width: g_v.size.width,
 				height: g_v.size.height
@@ -38,9 +44,7 @@ function start() {
 						page.waitForSelector("#textInput").then(function() {
 							page.type("#textInput", process.argv[2] || "A BOTTY BOT").then(function() {
 								page.keyboard.press("Enter").then(function() {
-									page.waitForFunction(function() {
-										return document.getElementById("textInputContainer").style.display === "none";
-									}).then(function() {
+									waitUntilDiepReady().then(function() {
 										startPlaying();
 									});
 								});
@@ -53,6 +57,49 @@ function start() {
 	});
 }
 
+function waitUntilDiepReady() {
+	return new Promise(function(resolve, reject) {
+		page.waitForFunction(function() {
+			return document.getElementById("textInputContainer").style.display === "none";
+		}).then(function() {
+			resolve();
+		});
+	});
+}
+
 function startPlaying() {
 	console.log("We are in");
+	p.waitForFunction(function() {
+		return document.getElementById("a").style.display === "block";
+	}).then(function() {
+		// you died!
+		page.keyboard.press("Enter").then(function() {
+			page.keyboard.press("Enter").then(function() {
+				waitUntilDiepReady().then(function() {
+					startPlaying();
+				});
+			});
+		});
+	});
+	
+	var datatracker = new tracking.ColorTracker([]); // TODO
+	
+	datatracker.on('track', function(event) {
+  		if (event.data.length !== 0) {
+    		event.data.forEach(function(data) {
+      			// Plots the detected targets here.
+    		});
+  		}
+	});
+	
+	setInterval(function() {
+		p.screenshot({
+			fullPage: true,
+			type: "png"
+		}).then(function(imagebuffer) {
+			PNG.decode(new PNG(imagebuffer), function(pixels) {
+				tracking.track(pixels, datatracker);
+			});
+		});
+	}, 1000);
 };
