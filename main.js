@@ -1,4 +1,9 @@
 var robot = require("robotjs");
+var Canvas = require("canvas");
+var Clipper = require("image-clipper")({
+    canvas: Canvas
+});
+var okrabyte = require("okrabyte");
 var puppeteer = require("puppeteer");
 var tracking = require("jstracking");
 var PNG = require("png-js");
