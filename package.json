@@ -9,7 +9,7 @@
     "png-js": "^0.1.1",
     "canvas": "^1.6.11",
     "image-clipper": "^0.4.3",
-    "okrabyte": "^0.1.1"
+    "ng-ocr": "^1.6.1"
   },
   "repository": {
     "type": "git",
