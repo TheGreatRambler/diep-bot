@@ -6,7 +6,10 @@
     "robotjs": "^0.5.1",
     "puppeteer": "^1.4.0",
     "jstracking": "^0.0.3",
-    "png-js": "^0.1.1"
+    "png-js": "^0.1.1",
+    "canvas": "^1.6.11",
+    "image-clipper": "^0.4.3",
+    "okrabyte": "^0.1.1"
   },
   "repository": {
     "type": "git",
