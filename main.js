@@ -23,12 +23,16 @@ var gameColors = {
 };
 
 function toTypedArray(buf) {
-    var ab = new ArrayBuffer(buf.length);
-    var view = new Uint8Array(ab);
-    for (var i = 0; i < buf.length; ++i) {
-        view[i] = buf[i];
+    if (Number(process.version.slice(1, -2)) >= 4) {
+        return new Uint8Array(buf);
+    } else {
+        var ab = new ArrayBuffer(buf.length);
+        var view = new Uint8Array(ab);
+        for (var i = 0; i < buf.length; ++i) {
+            view[i] = buf[i];
+        }
+        return view;
     }
-    return view;
 }
 
 var g_v = {
