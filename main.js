@@ -2,7 +2,8 @@ var robot = require("robotjs");
 var Ngocr = require("ng-ocr");
 var puppeteer = require("puppeteer");
 var tracker = require("./colortracker");
-var PNG = require("pngjs").PNG;
+var sharp = require("sharp");
+var imageSizeOf = require("image-size");
 
 var b;
 var p;
@@ -195,9 +196,7 @@ function startPlaying() {
             //fullPage: true,
             type: "png"
         }).then(function (imagebuffer) {
-            var screenshot = new PNG({
-                filterType: 4
-            });
+            sharp(imagebuffer)
             screenshot.parse(imagebuffer, function (error) {
                 objecttracker.track(screenshot.data, screenshot.width, screenshot.height).then(function(recs) {
                     if (recs.length !== 0) {
