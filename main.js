@@ -210,9 +210,6 @@ function startPlaying() {
                     }
                 });
             });
-            screenshot.parse(imagebuffer, function (error) {
-                
-            });
         });
     }, 200);
 };
