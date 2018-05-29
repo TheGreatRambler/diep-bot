@@ -196,9 +196,12 @@ function startPlaying() {
             //fullPage: true,
             type: "png"
         }).then(function (imagebuffer) {
-            sharp(imagebuffer)
-            screenshot.parse(imagebuffer, function (error) {
-                objecttracker.track(screenshot.data, screenshot.width, screenshot.height).then(function(recs) {
+            var resizefactor = 4;
+            var imagesize = imageSizeOf(imagebuffer);
+            var newWidth = Math.round(imagesize.width / resizefactor);
+            var newHeight = Math.round(imagesize.height / resizefactor);
+            sharp(imagebuffer).resize(newWidth, newHeight).raw().toBuffer().then(function(pixels) {
+                objecttracker.track(pixels.buffer, newWidth, newHeight).then(function(recs) {
                     if (recs.length !== 0) {
                         recs.forEach(function(rec) {
                             var gameobject = gameColors[rec.color];
@@ -206,6 +209,9 @@ function startPlaying() {
                         });
                     }
                 });
+            });
+            screenshot.parse(imagebuffer, function (error) {
+                
             });
         });
     }, 200);
