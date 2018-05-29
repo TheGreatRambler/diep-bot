@@ -1,7 +1,7 @@
 var robot = require("robotjs");
 var Ngocr = require("ng-ocr");
 var puppeteer = require("puppeteer");
-var tracker = require("./colortracker");
+var tracker = require("./colortracker"); // not tracking.js but based on it
 var sharp = require("sharp");
 var imageSizeOf = require("image-size");
 
