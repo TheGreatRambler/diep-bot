@@ -22,19 +22,6 @@ var gameColors = {
     "255,232,106": "Summoner"
 };
 
-function toTypedArray(buf) {
-    if (Number(process.version.slice(1, -2)) >= 4) {
-        return new Uint8Array(buf);
-    } else {
-        var ab = new ArrayBuffer(buf.length);
-        var view = new Uint8Array(ab);
-        for (var i = 0; i < buf.length; ++i) {
-            view[i] = buf[i];
-        }
-        return view;
-    }
-}
-
 var g_v = {
     size: robot.getScreenSize(),
     centerx: Math.round(robot.getScreenSize().width / 2),
@@ -214,7 +201,7 @@ function startPlaying() {
             var newWidth = Math.round(imagesize.width / resizefactor);
             var newHeight = Math.round(imagesize.height / resizefactor);
             sharp(imagebuffer).resize(newWidth, newHeight).raw().toBuffer().then(function(pixels) {
-                objecttracker.track(toTypedArray(pixels), newWidth, newHeight).then(function(recs) {
+                objecttracker.track(pixels, newWidth, newHeight).then(function(recs) {
                     if (recs.length !== 0) {
                         recs.forEach(function(rec) {
                             var gameobject = gameColors[rec.color];
