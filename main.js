@@ -194,7 +194,7 @@ function startPlaying() {
         console.log("Frame reading started");
         p.screenshot({
             //fullPage: true,
-            type: "png"
+            type: "jpeg"
         }).then(function (imagebuffer) {
             var resizefactor = 4;
             var imagesize = imageSizeOf(imagebuffer);
