@@ -2,7 +2,6 @@
   "name": "diep-bot",
   "version": "0.0.1",
   "description": "A diep.io bot for node.js",
-  "main": "main.js",
   "dependencies": {
     "ng-ocr": "^1.6.1",
     "npm": "^6.1.0",
