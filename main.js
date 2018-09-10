@@ -192,16 +192,22 @@ function startPlaying() {
 
     setInterval(function () {
         console.log("Frame reading started");
+        console.time("screenshot");
         p.screenshot({
             //fullPage: true,
-            type: "jpeg"
+            type: "png"
         }).then(function (imagebuffer) {
+            console.timeEnd("screenshot");
             var resizefactor = 4;
             var imagesize = imageSizeOf(imagebuffer);
             var newWidth = Math.round(imagesize.width / resizefactor);
             var newHeight = Math.round(imagesize.height / resizefactor);
+            console.time("resize");
             sharp(imagebuffer).resize(newWidth, newHeight).raw().toBuffer().then(function(pixels) {
+                console.timeEnd("resize");
+                console.time("tracking");
                 objecttracker.track(pixels, newWidth, newHeight).then(function(recs) {
+                    console.timeEnd("tracking");
                     if (recs.length !== 0) {
                         recs.forEach(function(rec) {
                             var gameobject = gameColors[rec.color];
@@ -211,7 +217,7 @@ function startPlaying() {
                 });
             });
         });
-    }, 200);
+    }, 2000);
 };
 
 start();
